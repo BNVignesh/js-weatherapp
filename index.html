@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wheather reporter</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="card">
+        <div class="search">
+            <input type="text" name="" id="" placeholder="Enter city name">
+            <button><img src="./images/search.png" alt=""></button>
+        </div>
+        <div class="error"><p>Enter valid city</p></div>
+        <div class="wheather">
+            <div class="info">
+                <img src="./images/clear.png" alt="">
+                <p class="temp">7°c</p>
+                <p class="city">New York</p>
+
+            </div>
+            <div class="extra">
+                <div class="humidity">
+                    <img src="./images/humidity.png" alt="">
+                    <p class="perhu">48%</p>
+                    <p>Humidity</p>
+                </div>
+                <div class="windspeed">
+                    <img src="./images/wind.png" alt="">
+                    <p class="wind">10Km/hr</p>
+                    <p>Windspeed</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+<script>
+    const apikey = "b8149c6355368c235569635ea2d514ac";
+    const apiurl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
+    async function getreport(city) {
+        const res = await fetch(apiurl +city+ `&apikey=${apikey}`);
+        const data = await res.json();
+        if(res.status==404){
+            document.querySelector('.error').style.display="block";
+            document.querySelector('.wheather').style.display="none";
+        }else{
+            console.log(data);
+
+        document.querySelector(".city").innerHTML=data.name;
+        document.querySelector('.temp').innerHTML=data.main.temp+"°c";
+        document.querySelector('.perhu').innerHTML=data.main.humidity+"%";
+        document.querySelector('.wind').innerHTML=data.wind.speed+"Km/hr";
+        document.querySelector('.wheather').style.display="block";
+        document.querySelector('.error').style.display="none";
+        if(data.weather.main==='Clear'){
+            document.querySelector('.info img').src='./images/clear.png';
+        }else if(data.weather[0].main==='Clouds'){
+            document.querySelector('.info img').src='./images/clouds.png';
+        }else if(data.weather[0].main==='Rain'){
+            document.querySelector('.info img').src='./images/rain.png';
+        }else if(data.weather[0].main==='Snow'){
+            document.querySelector('.info img').src='./images/snow.png';
+        }else if(data.weather[0].main==='Wind'){
+            document.querySelector('.info img').src='./images/wind.png';
+        }else if(data.weather[0].main==='Mist'){
+            document.querySelector('.info img').src='./images/mist.png';
+        }
+
+
+        }
+
+        
+
+
+    }
+    const search=document.querySelector('button')
+    search.addEventListener('click',()=>{
+        const input=document.querySelector('input');
+        const city=input.value;
+        getreport(city);
+        
+    }) 
+</script>
